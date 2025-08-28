@@ -119,6 +119,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # carpeta donde está app
 DOWNLOADS_DIR = os.path.join(BASE_DIR, "downloads2")
 os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 output1 = DOWNLOADS_DIR
+print(output1)
 
 #import tempfile, os
 #DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads2")
