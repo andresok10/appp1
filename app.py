@@ -115,11 +115,15 @@ def calendario():
 #output1 = "/sdcard/okdes"
 #os.makedirs(output1, exist_ok=True)
 
-import tempfile, os
-
-DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads2")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # carpeta donde está app.py
+DOWNLOADS_DIR = os.path.join(BASE_DIR, "downloads2")
 os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 output1 = DOWNLOADS_DIR
+
+#import tempfile, os
+#DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads2")
+#os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+#output1 = DOWNLOADS_DIR
 
 
 #ruta = os.path.join(BASE_DIR, "cookies.txt")
