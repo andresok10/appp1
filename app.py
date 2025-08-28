@@ -122,17 +122,14 @@ def calendario():
 #print(output1)
 
 #output1 = "/opt/render/project/src/downloads2"
+BASE_DIR = "/opt/render/project/src/downloads2"
 
 
 
-import tempfile, os
-#DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads2")
-#os.makedirs(DOWNLOADS_DIR, exist_ok=True)
-#output1 = DOWNLOADS_DIR
-
+#import tempfile, os
 # Carpeta temporal para descargas
-BASE_DIR = os.path.join(tempfile.gettempdir(), "downloads")
-os.makedirs(BASE_DIR, exist_ok=True)
+#BASE_DIR = os.path.join(tempfile.gettempdir(), "downloads")
+#os.makedirs(BASE_DIR, exist_ok=True)
 
 #ruta = os.path.join(BASE_DIR, "cookies.txt")
 #ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
