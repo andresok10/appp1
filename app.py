@@ -179,8 +179,8 @@ def descargar():
                 ydl.download([url])
 
             # 👉 Redirige directo a la descarga del archivo
-            #return redirect(url_for('serve_download',
-            return redirect(url_for("calendario",
+            return redirect(url_for('serve_download',
+            #return redirect(url_for("calendario",
                                     msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
                                     msg_type="success",
                                     filename=os.path.basename(filename)))
@@ -234,10 +234,10 @@ def descargar():
 #@app.route("/download/<path:output_file>")
 def serve_download(filename):
     filename = os.path.basename(filename)
-    file_path = os.path.join(BASE_DIR, filename)
-    return send_from_directory(file_path, filename, as_attachment=True)
+    #file_path = os.path.join(BASE_DIR, filename)
+    #return send_from_directory(file_path, filename, as_attachment=True)
     #return send_from_directory("downloads", output_file, as_attachment=True)
-    #return send_from_directory(DOWNLOADS_DIR, output_file, as_attachment=True)
+    return send_from_directory(BASE_DIR, filename, as_attachment=True)
 
 if __name__ == "__main__":
     # app.run(debug=True)
