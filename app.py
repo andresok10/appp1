@@ -105,15 +105,22 @@ def calendario():
 #DOWNLOADS_DIR = os.path.join(APP_ROOT, "downloads")
 #os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 #output1 = os.path.join(BASE_DIR, "downloads")
 #os.makedirs(output1, exist_ok=True)
 
 # output_path = "D:/dev/PYTHON/APPS_ANDRES/descargas_youtube/"
 #output1 = "/storage/emulated/0/downloads2"
 #output1 = "/sdcard/Download/okdes"
-output1 = "/sdcard/okdes"
-os.makedirs(output1, exist_ok=True)
+#output1 = "/sdcard/okdes"
+#os.makedirs(output1, exist_ok=True)
+
+import tempfile, os
+
+DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads")
+os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+output1 = DOWNLOADS_DIR
+
 
 #ruta = os.path.join(BASE_DIR, "cookies.txt")
 #ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
