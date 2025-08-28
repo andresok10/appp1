@@ -121,13 +121,18 @@ def calendario():
 #output1 = DOWNLOADS_DIR
 #print(output1)
 
-output1 = "/opt/render/project/src/downloads2"
+#output1 = "/opt/render/project/src/downloads2"
 
-#import tempfile, os
+
+
+import tempfile, os
 #DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads2")
 #os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 #output1 = DOWNLOADS_DIR
 
+# Carpeta temporal para descargas
+BASE_DIR = os.path.join(tempfile.gettempdir(), "downloads")
+os.makedirs(BASE_DIR, exist_ok=True)
 
 #ruta = os.path.join(BASE_DIR, "cookies.txt")
 #ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
@@ -147,9 +152,9 @@ def descargar():
         extension = "m4a" if download_type == "audio" else "webm"
         counter = 1
         while True:
-            filename = os.path.join(output1, f"{counter}.{extension}")
+            #filename = os.path.join(output1, f"{counter}.{extension}")
             #output_file = os.path.join(DOWNLOADS_DIR, f"{counter}.{extension}")
-            # output_file = os.path.join(BASE_DIR, f"{counter}.{extension}")
+            filename = os.path.join(BASE_DIR, f"{counter}.{extension}")
             if not os.path.exists(filename):
                 break
             counter += 1
@@ -177,8 +182,8 @@ def descargar():
                 ydl.download([url])
 
             # 👉 Redirige directo a la descarga del archivo
-            #return redirect(url_for('serve_download',
-            return redirect(url_for("calendario",
+            return redirect(url_for('serve_download',
+            #return redirect(url_for("calendario",
                                     msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
                                     msg_type="success",
                                     filename=os.path.basename(filename)))
@@ -232,7 +237,8 @@ def descargar():
 #@app.route("/download/<path:output_file>")
 def serve_download(filename):
     filename = os.path.basename(filename)
-    return send_from_directory(output1, filename, as_attachment=True)
+    file_path = os.path.join(BASE_DIR, filename)
+    return send_from_directory(file_path, filename, as_attachment=True)
     #return send_from_directory("downloads", output_file, as_attachment=True)
     #return send_from_directory(DOWNLOADS_DIR, output_file, as_attachment=True)
 
