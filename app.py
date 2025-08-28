@@ -115,11 +115,13 @@ def calendario():
 #output1 = "/sdcard/okdes"
 #os.makedirs(output1, exist_ok=True)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # carpeta donde está app.py
-DOWNLOADS_DIR = os.path.join(BASE_DIR, "downloads2")
-os.makedirs(DOWNLOADS_DIR, exist_ok=True)
-output1 = DOWNLOADS_DIR
-print(output1)
+#BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # carpeta donde está app.py
+#DOWNLOADS_DIR = os.path.join(BASE_DIR, "downloads2")
+#os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+#output1 = DOWNLOADS_DIR
+#print(output1)
+
+output1 = "/opt/render/project/src/downloads2"
 
 #import tempfile, os
 #DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads2")
@@ -226,11 +228,11 @@ def descargar():
 
 
 ## Si quieres habilitar descarga directa de archivos:
-# @app.route('/downloads/<path:filename>')
-@app.route("/download/<path:output_file>")
-def serve_download(output_file):
-    output_file = os.path.basename(output_file)
-    return send_from_directory(output1, output_file, as_attachment=True)
+@app.route('/downloads/<path:filename>')
+#@app.route("/download/<path:output_file>")
+def serve_download(filename):
+    filename = os.path.basename(filename)
+    return send_from_directory(output1, filename, as_attachment=True)
     #return send_from_directory("downloads", output_file, as_attachment=True)
     #return send_from_directory(DOWNLOADS_DIR, output_file, as_attachment=True)
 
