@@ -115,7 +115,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 output1 = "/sdcard/okdes"
 os.makedirs(output1, exist_ok=True)
 
-ruta = os.path.join(BASE_DIR, "cookies.txt")
+#ruta = os.path.join(BASE_DIR, "cookies.txt")
 #ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
 
 @app.route("/descargar", methods=["GET", "POST"])
@@ -145,7 +145,7 @@ def descargar():
             "outtmpl": output_file,
             "quiet": True,
             "no_warnings": True,
-            "cookiefile": ruta,
+            #"cookiefile": ruta,
             #'noplaylist': True,
             # evitar caracteres raros en nombres
             #'restrictfilenames': True,
