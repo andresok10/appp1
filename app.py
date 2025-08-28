@@ -109,7 +109,7 @@ def calendario():
 #output1 = os.path.join(BASE_DIR, "downloads")
 #os.makedirs(output1, exist_ok=True)
 
-# output_path = "D:/dev/PYTHON/APPS_ANDRES/descargas_youtube/"
+# output1 = "D:/dev/PYTHON/APPS_ANDRES/descargas_youtube/"
 #output1 = "/storage/emulated/0/downloads2"
 #output1 = "/sdcard/Download/okdes"
 #output1 = "/sdcard/okdes"
