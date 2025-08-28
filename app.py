@@ -4,7 +4,7 @@ from flask import (
     request,
     send_from_directory,
     redirect,
-    url_for,send_file,
+    url_for,send_file,flash,get_flashed_messages
 )
 import requests
 import calendar, os
@@ -34,6 +34,7 @@ def calendario():
 
     edad = ""
     signo = ""
+    cumple = ""
     faltan = None
     descuento = None
 
@@ -77,17 +78,17 @@ def calendario():
             descuento = "Error en los datos ingresados"
 
     # recoger mensajes de la descarga si existen
-    msg = request.args.get("msg", "")
-    msg_type = request.args.get("msg_type", "")
-
+    #msg = request.args.get("msg", "")
+    #msg_type = request.args.get("msg_type", "")
+        #msg=msg,
+        #msg_type=msg_type,
     return render_template(
         "app.html",
-        msg=msg,
-        msg_type=msg_type,
         hoy=hoy,
         meses=meses,
         edad=edad,
         signo=signo,
+        cumple=cumple,
         faltan=faltan,
         descuento=descuento,
     )
@@ -169,17 +170,21 @@ def descargar():
             with YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
 
+            flash(f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.", "success")
             # 👉 Redirige directo a la descarga del archivo
             #return redirect(url_for('serve_download',
-            return redirect(url_for("calendario",
-                                    msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
-                                    msg_type="success",
-                                    filename=os.path.basename(filename)))
+            #return redirect(url_for("calendario",
+            #                        msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
+            #                        msg_type="success",
+            #                        filename=os.path.basename(filename)))
+            return redirect(url_for('serve_download',filename=os.path.basename(filename)))
 
         except Exception as e:
             #msg = f"Error al descargar el archivo: {str(e)}"
-            msg = f"Error al descargar el archivo: Url no valido"
-            return redirect(url_for("calendario", msg=msg, msg_type="error"))
+            #msg = f"Error al descargar el archivo: Url no valido"
+            flash("Error al descargar el archivo: Url no válido", "error")
+            #return redirect(url_for("calendario", msg=msg, msg_type="error"))
+            return redirect(url_for("calendario"))
             
 '''from flask import send_file
 from io import BytesIO
@@ -218,24 +223,29 @@ def descargar():
 
 
 ## Si quieres habilitar descarga directa de archivos:
-'''@app.route('/downloads/<path:filename>')
+@app.route('/downloads/<path:filename>')
 #@app.route("/download/<path:output_file>")
 def serve_download(filename):
     filename = os.path.basename(filename)
+    #print(filename) # 1.webm
+    #filename = os.path.join(BASE_DIR, os.path.basename(filename))
+    #print(filename)
     #file_path = os.path.join(BASE_DIR, filename)
+    
+    
     #return send_from_directory(file_path, filename, as_attachment=True)
     #return send_from_directory("downloads", output_file, as_attachment=True)
-    return send_from_directory(BASE_DIR, filename, as_attachment=True)'''
+    return send_from_directory(BASE_DIR, filename, as_attachment=True)
 
 #Alternativa más simple con send_file
 #Si quieres evitar confusiones con rutas, puedes usar send_file directamente:
-from flask import send_file
+'''from flask import send_file
 import os
 @app.route('/downloads/<path:filename>')
 def serve_download(filename):
     filename = os.path.basename(filename)
     file_path = os.path.join(BASE_DIR, filename)
-    return send_file(file_path, as_attachment=True)
+    return send_file(file_path, as_attachment=True)'''
 #Esto funciona exactamente igual y es más directo.
 #Ideal cuando tu archivo ya está en el servidor y no quieres preocuparte de la carpeta.
 

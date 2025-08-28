@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -249,6 +250,9 @@
         {% if signo %}
         <p class="resultado">Signo: {{ signo }}</p>
         {% endif %}
+        {% if cumples %}
+        <p class="resultado">Signo: {{ signo }}</p>
+        {% endif %}
         {% if faltan is not none %}
         <p class="resultado">Faltan {{ faltan }} días para tu próximo cumpleaños</p>
         {% endif %}
@@ -284,12 +288,20 @@
             <button type="submit">Descargar</button>
         </form>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert {{ category }}" id="resultado-msg">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         <!-- ✅ Mensaje dinámico después del redirect -->
-        {% if msg %}
+        <!--{% if msg %}
         <div class="alert {{ msg_type }}" id="resultado-msg">
             {{ msg }}
         </div>
-        {% endif %}
+        {% endif %}-->
 
     </div>
 
