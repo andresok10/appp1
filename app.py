@@ -218,24 +218,24 @@ def descargar():
 
 
 ## Si quieres habilitar descarga directa de archivos:
-@app.route('/downloads/<path:filename>')
+'''@app.route('/downloads/<path:filename>')
 #@app.route("/download/<path:output_file>")
 def serve_download(filename):
     filename = os.path.basename(filename)
     #file_path = os.path.join(BASE_DIR, filename)
     #return send_from_directory(file_path, filename, as_attachment=True)
     #return send_from_directory("downloads", output_file, as_attachment=True)
-    return send_from_directory(BASE_DIR, filename, as_attachment=True)
+    return send_from_directory(BASE_DIR, filename, as_attachment=True)'''
 
 #Alternativa más simple con send_file
 #Si quieres evitar confusiones con rutas, puedes usar send_file directamente:
-'''from flask import send_file
+from flask import send_file
 import os
 @app.route('/downloads/<path:filename>')
 def serve_download(filename):
     filename = os.path.basename(filename)
     file_path = os.path.join(BASE_DIR, filename)
-    return send_file(file_path, as_attachment=True)'''
+    return send_file(file_path, as_attachment=True)
 #Esto funciona exactamente igual y es más directo.
 #Ideal cuando tu archivo ya está en el servidor y no quieres preocuparte de la carpeta.
 
