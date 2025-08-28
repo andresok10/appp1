@@ -94,16 +94,10 @@ def calendario():
 
 
 ############################################################################
-#APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-#print(APP_ROOT)
-#DOWNLOADS_DIR = os.path.join(APP_ROOT, 'downloads')
-
-#import tempfile
-# Directorio temporal del sistema (válido en la mayoría de hostings)
-#DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads")
-#DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), APP_ROOT)
-#DOWNLOADS_DIR = os.path.join(APP_ROOT, "downloads")
-#os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+# Carpeta base donde están los archivos que vas a descargar
+#BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
+# Crear la carpeta si no existe
+#os.makedirs(BASE_DIR, exist_ok=True)
 
 #BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 #output1 = os.path.join(BASE_DIR, "downloads")
@@ -124,23 +118,20 @@ def calendario():
 #output1 = "/opt/render/project/src/downloads2"
 BASE_DIR = "/opt/render/project/src/downloads2"
 
-
-
 #import tempfile, os
-# Carpeta temporal para descargas
+# Carpeta temporal para descargas # Directorio temporal del sistema (válido en la mayoría de hostings)
 #BASE_DIR = os.path.join(tempfile.gettempdir(), "downloads")
 #os.makedirs(BASE_DIR, exist_ok=True)
 
 #ruta = os.path.join(BASE_DIR, "cookies.txt")
 #ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
 
-@app.route("/descargar", methods=["GET", "POST"])
-#@app.route("/descargar", methods=["POST"])
+#@app.route("/descargar", methods=["GET", "POST"])
+@app.route("/descargar", methods=["POST"])
 def descargar():
     # download_url = None
     msg = ""
     msg_type = ""
-
     if request.method == "POST":
         url = request.form.get("url").split("?")[0]  # Limpiar la URL
         # url = request.form.get("url")
@@ -194,9 +185,6 @@ def descargar():
 from io import BytesIO
 import requests
 import tempfile
-# Directorio temporal del sistema (válido en la mayoría de hostings)
-DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads")
-os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 
 @app.route("/descargar", methods=["POST"])
 def descargar():
@@ -238,6 +226,18 @@ def serve_download(filename):
     #return send_from_directory(file_path, filename, as_attachment=True)
     #return send_from_directory("downloads", output_file, as_attachment=True)
     return send_from_directory(BASE_DIR, filename, as_attachment=True)
+
+#Alternativa más simple con send_file
+#Si quieres evitar confusiones con rutas, puedes usar send_file directamente:
+'''from flask import send_file
+import os
+@app.route('/downloads/<path:filename>')
+def serve_download(filename):
+    filename = os.path.basename(filename)
+    file_path = os.path.join(BASE_DIR, filename)
+    return send_file(file_path, as_attachment=True)'''
+#Esto funciona exactamente igual y es más directo.
+#Ideal cuando tu archivo ya está en el servidor y no quieres preocuparte de la carpeta.
 
 if __name__ == "__main__":
     # app.run(debug=True)
