@@ -110,11 +110,11 @@ output1 = os.path.join(BASE_DIR, "downloads")
 os.makedirs(output1, exist_ok=True)
 
 # output_path = "D:/dev/PYTHON/APPS_ANDRES/descargas_youtube/"
-#output1 = "tmp/downloads"
-#os.makedirs(output1, exist_ok=True)
+output1 = "storage/emulated/0/downloads2"
+os.makedirs(output1, exist_ok=True)
+
 ruta = os.path.join(BASE_DIR, "cookies.txt")
 #ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
-
 
 @app.route("/descargar", methods=["GET", "POST"])
 #@app.route("/descargar", methods=["POST"])
