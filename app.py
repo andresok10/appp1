@@ -147,16 +147,16 @@ def descargar():
         extension = "m4a" if download_type == "audio" else "webm"
         counter = 1
         while True:
-            output_file = os.path.join(output1, f"{counter}.{extension}")
+            filename = os.path.join(output1, f"{counter}.{extension}")
             #output_file = os.path.join(DOWNLOADS_DIR, f"{counter}.{extension}")
             # output_file = os.path.join(BASE_DIR, f"{counter}.{extension}")
-            if not os.path.exists(output_file):
+            if not os.path.exists(filename):
                 break
             counter += 1
         format_flag = "bestaudio" if download_type == "audio" else "best"
         ydl_opts = {
             "format": format_flag,
-            "outtmpl": output_file,
+            "outtmpl": filename,
             "quiet": True,
             "no_warnings": True,
             #"cookiefile": ruta,
@@ -179,9 +179,9 @@ def descargar():
             # 👉 Redirige directo a la descarga del archivo
             #return redirect(url_for('serve_download',
             return redirect(url_for("calendario",
-                                    msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(output_file)}.",
+                                    msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
                                     msg_type="success",
-                                    output_file=os.path.basename(output_file)))
+                                    filename=os.path.basename(filename)))
 
         except Exception as e:
             #msg = f"Error al descargar el archivo: {str(e)}"
