@@ -105,17 +105,18 @@ def calendario():
 #DOWNLOADS_DIR = os.path.join(APP_ROOT, "downloads")
 #os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 
-#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#output1 = os.path.join(BASE_DIR, "downloads")
-#os.makedirs(output1, exist_ok=True)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+output1 = os.path.join(BASE_DIR, "downloads")
+os.makedirs(output1, exist_ok=True)
+
 # output_path = "D:/dev/PYTHON/APPS_ANDRES/descargas_youtube/"
-output1 = "tmp/downloads"
+#output1 = "tmp/downloads"
 #os.makedirs(output1, exist_ok=True)
-#ruta = os.path.join(BASE_DIR, "cookies.txt")
+ruta = os.path.join(BASE_DIR, "cookies.txt")
 #ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
 
 
-'''@app.route("/descargar", methods=["GET", "POST"])
+@app.route("/descargar", methods=["GET", "POST"])
 #@app.route("/descargar", methods=["POST"])
 def descargar():
     # download_url = None
@@ -130,8 +131,8 @@ def descargar():
         extension = "m4a" if download_type == "audio" else "webm"
         counter = 1
         while True:
-            #output_file = os.path.join(output1, f"{counter}.{extension}")
-            output_file = os.path.join(DOWNLOADS_DIR, f"{counter}.{extension}")
+            output_file = os.path.join(output1, f"{counter}.{extension}")
+            #output_file = os.path.join(DOWNLOADS_DIR, f"{counter}.{extension}")
             # output_file = os.path.join(BASE_DIR, f"{counter}.{extension}")
             if not os.path.exists(output_file):
                 break
@@ -142,7 +143,7 @@ def descargar():
             "outtmpl": output_file,
             "quiet": True,
             "no_warnings": True,
-            #"cookiefile": ruta,
+            "cookiefile": ruta,
             #'noplaylist': True,
             # evitar caracteres raros en nombres
             #'restrictfilenames': True,
@@ -169,13 +170,12 @@ def descargar():
         except Exception as e:
             #msg = f"Error al descargar el archivo: {str(e)}"
             msg = f"Error al descargar el archivo: Url no valido"
-            return redirect(url_for("calendario", msg=msg, msg_type="error"))'''
+            return redirect(url_for("calendario", msg=msg, msg_type="error"))
             
-from flask import send_file
+'''from flask import send_file
 from io import BytesIO
 import requests
 import tempfile
-
 # Directorio temporal del sistema (válido en la mayoría de hostings)
 DOWNLOADS_DIR = os.path.join(tempfile.gettempdir(), "downloads")
 os.makedirs(DOWNLOADS_DIR, exist_ok=True)
@@ -208,7 +208,7 @@ def descargar():
 
     except Exception as e:
         msg = f"Error al descargar: {str(e)}"
-        return redirect(url_for("calendario", msg=msg, msg_type="error"))
+        return redirect(url_for("calendario", msg=msg, msg_type="error"))'''
 
 
 ## Si quieres habilitar descarga directa de archivos:
@@ -216,9 +216,9 @@ def descargar():
 @app.route("/downloads/<path:output_file>")
 def serve_download(output_file):
     output_file = os.path.basename(output_file)
-    #return send_from_directory(output1, output_file, as_attachment=True)
+    return send_from_directory(output1, output_file, as_attachment=True)
     #return send_from_directory("downloads", output_file, as_attachment=True)
-    return send_from_directory(DOWNLOADS_DIR, output_file, as_attachment=True)
+    #return send_from_directory(DOWNLOADS_DIR, output_file, as_attachment=True)
 
 if __name__ == "__main__":
     # app.run(debug=True)
