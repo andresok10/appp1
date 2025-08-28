@@ -106,11 +106,11 @@ def calendario():
 #os.makedirs(DOWNLOADS_DIR, exist_ok=True)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-output1 = os.path.join(BASE_DIR, "downloads")
-os.makedirs(output1, exist_ok=True)
+#output1 = os.path.join(BASE_DIR, "downloads")
+#os.makedirs(output1, exist_ok=True)
 
 # output_path = "D:/dev/PYTHON/APPS_ANDRES/descargas_youtube/"
-output1 = "storage/emulated/0/downloads2"
+output1 = "/storage/emulated/0/downloads2"
 os.makedirs(output1, exist_ok=True)
 
 ruta = os.path.join(BASE_DIR, "cookies.txt")
