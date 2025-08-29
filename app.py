@@ -1,8 +1,4 @@
-from flask import (
-    Flask,
-    render_template,
-    request,
-    send_from_directory,
+from flask import (Flask,render_template,request,send_from_directory,
     redirect,
     url_for,
     send_file,
@@ -25,6 +21,7 @@ def inject_globals():
 
 
 @app.route("/", methods=["GET", "POST"])
+@app.route("/calen", methods=["GET", "POST"])
 def calendario():
     hoy = datetime.today()
     meses = [
@@ -80,14 +77,18 @@ def calendario():
             descuento = monto - (monto * porcentaje / 100)
         except:
             descuento = "Error en los datos ingresados"
-    
+
     # recoger mensajes de la descarga si existen
     msg = request.args.get("msg", "")
     msg_type = request.args.get("msg_type", "")
-    download_url = request.args.get("download_url", "")
+    
+    # recoger mensajes de la descarga si existen
+    #msg = request.args.get("msg", "")
+    #msg_type = request.args.get("msg_type", "")
+    download_url = request.args.get("download_url", "") # download_url=download_url,
 
     return render_template(
-        "app.html",
+        "app_jsonify.html",
         msg=msg,
         msg_type=msg_type,
         download_url=download_url,
@@ -137,23 +138,21 @@ def descargar():
         try:
             with YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
-            # ✅ Redirigimos a la página principal con mensaje y link de descarga
-            return redirect(
-                url_for(
-                    "calendario",
-                    msg=f"{download_type.capitalize()} descargado con éxito.",
-                    msg_type="success",
-                    download_url=url_for("serve_download", filename=os.path.basename(filename)),
-                )
+            # return redirect(url_for('serve_download',filename=os.path.basename(filename)))
+            return jsonify(
+                {
+                    "status": "success",
+                    "msg": f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
+                    "download_url": url_for(
+                        "serve_download", filename=os.path.basename(filename)
+                    ),
+                }
             )
-        except Exception:
-            return redirect(
-                url_for(
-                    "calendario",
-                    msg="Error al descargar el archivo: URL no válida",
-                    msg_type="error",
-                )
-            )
+
+        except Exception as e:
+                return jsonify({
+                "status": "error",
+                "msg": "Error al descargar el archivo: URL no válida"})
 
 ## Si quieres habilitar descarga directa de archivos:
 @app.route("/downloads/<path:filename>")

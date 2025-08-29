@@ -238,9 +238,9 @@
         {% endfor %}
     </div>
 
-    <div class="form-section">
+    <div class="form-section" id="edad">
         <h4>Calcular Edad y Signo Zodiacal</h4>
-        <form method="POST" action="/">
+        <form method="POST" action="/#calen">
             <input type="text" name="fecha_nacimiento" placeholder="dd/mm/aaaa">
             <button type="submit">Calcular</button>
         </form>
@@ -273,7 +273,8 @@
     <!-- ================== DESCARGAS ================== -->
     <div class="descarga-container" id="descargar-form">
         <h2>Descargar Video o Audio</h2>
-        <form method="POST" action="/descargar">
+        <!--<form method="POST" action="/descargar">      esto ya lo maneja ajax -->
+        <form>
             <div class="form-group">
                 <label for="url">Ingresa la URL (YouTube, Facebook o TikTok):</label>
                 <input type="url" id="url" name="url" required placeholder="https://www.ejemplo.com/video">
@@ -288,65 +289,31 @@
             <button type="submit">Descargar</button>
         </form>
 
-        {% if msg %}
-        <div class="alert {{ msg_type }}" id="resultado-msg">
-            {{ msg }}
-        </div>
-        {% endif %}
-    </div>
-
-
-    <!--<div class="descarga-container" id="descargar-form">
-        <h2>Descargar Video o Audio</h2>-->
-    <!--<form method="POST" action="/descargar">     <!-- esto ya lo maneja ajax -->
-    <!--<form>
-            <div class="form-group">
-                <label for="url">Ingresa la URL (YouTube, Facebook o TikTok):</label>
-                <input type="url" id="url" name="url" required placeholder="https://www.ejemplo.com/video">
-            </div>
-            <div class="form-group">
-                <label for="download_type">Tipo de descarga:</label>
-                <select id="download_type" name="download_type">
-                    <option value="video">Video</option>
-                    <option value="audio">Audio</option>
-                </select>
-            </div>
-            <button type="submit">Descargar</button>
-        </form>
-        
-        <div id="resultado-msg"></div>--> <!-- Div donde se mostrará el mensaje -->
-
-    <!--{% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert {{ category }}" id="resultado-msg">{{ message }}</div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}-->
-
-    <!-- ✅ Mensaje dinámico después del redirect -->
-    <!--{% if msg %}
-        <div class="alert {{ msg_type }}" id="resultado-msg">
-            {{ msg }}
-        </div>
-        {% endif %}-->
+        <div id="resultado-msg"></div> <!-- Div donde se mostrará el mensaje -->
 
     </div>
-
-    <!-- ✅ Script para mantener la posición -->
+    
     <script>
         // Intentar forzar descarga automática
         //window.location.href = "{{ download_url }}";
 
+        //Script para mantener la posición
         window.addEventListener("DOMContentLoaded", function () {
-            const msgDiv = document.getElementById("resultado-msg");
+            //const msgDiv = document.getElementById("resultado-msg");
+            const msgDiv = document.getElementById("descargar-form");
+            if (msgDiv) {
+                msgDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        });
+        window.addEventListener("DOMContentLoaded", function () {
+            const msgDiv = document.getElementById("edad");
             if (msgDiv) {
                 msgDiv.scrollIntoView({ behavior: "smooth", block: "center" });
             }
         });
 
         //Script para manejar la descarga vía AJAX
-        /*const form = document.querySelector("#descargar-form form");
+        const form = document.querySelector("#descargar-form form");
 
         form.addEventListener("submit", async function (e) {
             e.preventDefault();
@@ -367,9 +334,27 @@
                 window.location.href = data.download_url;
             }
         });
+    </script>
 
+    <!--<form id="form-descargar">
+        <div class="form-group">
+            <label for="url">Ingresa la URL (YouTube, Facebook o TikTok):</label>
+            <input type="url" id="url" name="url" required placeholder="https://www.ejemplo.com/video">
+        </div>
+        <div class="form-group">
+            <label for="download_type">Tipo de descarga:</label>
+            <select id="download_type" name="download_type">
+                <option value="video">Video</option>
+                <option value="audio">Audio</option>
+            </select>
+        </div>
+        <button type="submit">Descargar</button>
+    </form>
 
-        /*document.getElementById("descargar-form").addEventListener("submit", async function (e) {
+    <div id="resultado-msg"></div>
+
+    <script>
+        document.getElementById("form-descargar").addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const formData = new FormData(this);
@@ -387,10 +372,9 @@
                 // Inicia descarga enseguida
                 window.location.href = data.download_url;
             }
-        });*/
+        });
+    </script>-->
 
-
-    </script>
 </body>
 
 </html>
