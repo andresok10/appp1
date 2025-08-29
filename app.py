@@ -4,7 +4,11 @@ from flask import (
     request,
     send_from_directory,
     redirect,
-    url_for,send_file,flash,get_flashed_messages,jsonify
+    url_for,
+    send_file,
+    flash,
+    get_flashed_messages,
+    jsonify,
 )
 import requests
 import calendar, os
@@ -76,14 +80,17 @@ def calendario():
             descuento = monto - (monto * porcentaje / 100)
         except:
             descuento = "Error en los datos ingresados"
-
+    
     # recoger mensajes de la descarga si existen
-    #msg = request.args.get("msg", "")
-    #msg_type = request.args.get("msg_type", "")
-        #msg=msg,
-        #msg_type=msg_type,
+    msg = request.args.get("msg", "")
+    msg_type = request.args.get("msg_type", "")
+    download_url = request.args.get("download_url", "")
+
     return render_template(
         "app.html",
+        msg=msg,
+        msg_type=msg_type,
+        download_url=download_url,
         hoy=hoy,
         meses=meses,
         edad=edad,
@@ -96,38 +103,11 @@ def calendario():
 
 ############################################################################
 # Carpeta base donde están los archivos que vas a descargar
-#BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
+BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 # Crear la carpeta si no existe
-#os.makedirs(BASE_DIR, exist_ok=True)
+# os.makedirs(BASE_DIR, exist_ok=True)
 
-#BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#output1 = os.path.join(BASE_DIR, "downloads")
-#os.makedirs(output1, exist_ok=True)
-
-# output1 = "D:/dev/PYTHON/APPS_ANDRES/descargas_youtube/"
-#output1 = "/storage/emulated/0/downloads2"
-#output1 = "/sdcard/Download/okdes"
-#output1 = "/sdcard/okdes"
-#os.makedirs(output1, exist_ok=True)
-
-#BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # carpeta donde está app.py
-#DOWNLOADS_DIR = os.path.join(BASE_DIR, "downloads2")
-#os.makedirs(DOWNLOADS_DIR, exist_ok=True)
-#output1 = DOWNLOADS_DIR
-#print(output1)
-
-#output1 = "/opt/render/project/src/downloads2"
-BASE_DIR = "/opt/render/project/src/downloads2"
-
-#import tempfile, os
-# Carpeta temporal para descargas # Directorio temporal del sistema (válido en la mayoría de hostings)
-#BASE_DIR = os.path.join(tempfile.gettempdir(), "downloads")
-#os.makedirs(BASE_DIR, exist_ok=True)
-
-#ruta = os.path.join(BASE_DIR, "cookies.txt")
-#ruta = os.path.join(DOWNLOADS_DIR, "chromewebstore.google.com_cookies.txt")
-
-#@app.route("/descargar", methods=["GET", "POST"])
+# @app.route("/descargar", methods=["GET", "POST"])
 @app.route("/descargar", methods=["POST"])
 def descargar():
     # download_url = None
@@ -141,8 +121,8 @@ def descargar():
         extension = "m4a" if download_type == "audio" else "webm"
         counter = 1
         while True:
-            #filename = os.path.join(output1, f"{counter}.{extension}")
-            #output_file = os.path.join(DOWNLOADS_DIR, f"{counter}.{extension}")
+            # filename = os.path.join(output1, f"{counter}.{extension}")
+            # output_file = os.path.join(DOWNLOADS_DIR, f"{counter}.{extension}")
             filename = os.path.join(BASE_DIR, f"{counter}.{extension}")
             if not os.path.exists(filename):
                 break
@@ -153,118 +133,43 @@ def descargar():
             "outtmpl": filename,
             "quiet": True,
             "no_warnings": True,
-            #"cookiefile": ruta,
-            #'noplaylist': True,
-            # evitar caracteres raros en nombres
-            #'restrictfilenames': True,
-            #'cachedir': False,
-            #'postprocessors': [
-            # {
-            #    'key': 'FFmpegExtractAudio',
-            #    'preferredcodec': 'mp3',
-            #    'preferredquality': '192',
-            # }
-            # ],
         }
         try:
             with YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
-
-            #flash(f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.", "success")
-            # 👉 Redirige directo a la descarga del archivo
-            #return redirect(url_for('serve_download',
-            #return redirect(url_for("calendario",
-            #                        msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
-            #                        msg_type="success",
-            #                        filename=os.path.basename(filename)))
-            #return redirect(url_for('serve_download',filename=os.path.basename(filename)))
-            return jsonify({
-            "status": "success",
-            "msg": f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
-            "download_url": url_for("serve_download", filename=os.path.basename(filename))})
-
-        except Exception as e:
-            return jsonify({
-            "status": "error",
-            "msg": "Error al descargar el archivo: URL no válida"})
-            
-        '''except Exception as e:
-            #msg = f"Error al descargar el archivo: {str(e)}"
-            #msg = f"Error al descargar el archivo: Url no valido"
-            flash("Error al descargar el archivo: Url no válido", "error")
-            #return redirect(url_for("calendario", msg=msg, msg_type="error"))
-            return redirect(url_for("calendario"))'''
-            
-'''from flask import send_file
-from io import BytesIO
-import requests
-import tempfile
-
-@app.route("/descargar", methods=["POST"])
-def descargar():
-    url = request.form.get("url")
-    download_type = request.form.get("download_type")
-    format_flag = "bestaudio" if download_type == "audio" else "best"
-
-    ydl_opts = {"format": format_flag}
-
-    try:
-        with YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            stream_url = info["url"]
-
-        # Descargar el stream directamente
-        r = requests.get(stream_url, stream=True)
-        buffer = BytesIO(r.content)
-
-        # Nombre del archivo
-        ext = "m4a" if download_type == "audio" else "webm"
-        return send_file(
-            buffer,
-            as_attachment=True,
-            download_name=f"video.{ext}",
-            mimetype="audio/m4a" if ext == "m4a" else "video/webm"
-        )
-
-    except Exception as e:
-        msg = f"Error al descargar: {str(e)}"
-        return redirect(url_for("calendario", msg=msg, msg_type="error"))'''
-
+            # ✅ Redirigimos a la página principal con mensaje y link de descarga
+            return redirect(
+                url_for(
+                    "calendario",
+                    msg=f"{download_type.capitalize()} descargado con éxito.",
+                    msg_type="success",
+                    download_url=url_for("serve_download", filename=os.path.basename(filename)),
+                )
+            )
+        except Exception:
+            return redirect(
+                url_for(
+                    "calendario",
+                    msg="Error al descargar el archivo: URL no válida",
+                    msg_type="error",
+                )
+            )
 
 ## Si quieres habilitar descarga directa de archivos:
-@app.route('/downloads/<path:filename>')
-#@app.route("/download/<path:output_file>")
+@app.route("/downloads/<path:filename>")
+# @app.route("/download/<path:output_file>")
 def serve_download(filename):
     filename = os.path.basename(filename)
-    #print(filename) # 1.webm
-    #filename = os.path.join(BASE_DIR, os.path.basename(filename))
-    #print(filename)
-    #file_path = os.path.join(BASE_DIR, filename)
-    
-    
-    #return send_from_directory(file_path, filename, as_attachment=True)
-    #return send_from_directory("downloads", output_file, as_attachment=True)
-    return send_from_directory(BASE_DIR, filename, as_attachment=True)
+    # print(filename) # 1.webm
+    # filename = os.path.join(BASE_DIR, os.path.basename(filename))
+    # print(filename)
+    # file_path = os.path.join(BASE_DIR, filename)
 
-#Alternativa más simple con send_file
-#Si quieres evitar confusiones con rutas, puedes usar send_file directamente:
-'''from flask import send_file
-import os
-@app.route('/downloads/<path:filename>')
-def serve_download(filename):
-    filename = os.path.basename(filename)
-    file_path = os.path.join(BASE_DIR, filename)
-    return send_file(file_path, as_attachment=True)'''
-#Esto funciona exactamente igual y es más directo.
-#Ideal cuando tu archivo ya está en el servidor y no quieres preocuparte de la carpeta.
+    # return send_from_directory(file_path, filename, as_attachment=True)
+    # return send_from_directory("downloads", output_file, as_attachment=True)
+    return send_from_directory(BASE_DIR, filename, as_attachment=True)
 
 if __name__ == "__main__":
     # app.run(debug=True)
     port = int(os.environ.get("PORT", 5002))
     app.run(host="0.0.0.0", port=port, debug=True)
-
-# {% if msg %}
-#        <div class="alert {{ msg_type }}">
-#            {{ msg }}
-#        </div>
-#        {% endif %}

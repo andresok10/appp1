@@ -287,9 +287,40 @@
             </div>
             <button type="submit">Descargar</button>
         </form>
-        <div id="resultado-msg"></div>
 
-        <!--{% with messages = get_flashed_messages(with_categories=true) %}
+        {% if msg %}
+        <div class="alert {{ msg_type }}" id="resultado-msg">
+            {{ msg }}
+
+            <!--{% if download_url %}-->
+            <!--<a href="{{ download_url }}" class="btn btn-primary">👉 Descargar ahora</a>-->
+            <!--{% endif %}-->
+        </div>
+        {% endif %}
+    </div>
+
+
+    <!--<div class="descarga-container" id="descargar-form">
+        <h2>Descargar Video o Audio</h2>-->
+    <!--<form method="POST" action="/descargar">     <!-- esto ya lo maneja ajax -->
+    <!--<form>
+            <div class="form-group">
+                <label for="url">Ingresa la URL (YouTube, Facebook o TikTok):</label>
+                <input type="url" id="url" name="url" required placeholder="https://www.ejemplo.com/video">
+            </div>
+            <div class="form-group">
+                <label for="download_type">Tipo de descarga:</label>
+                <select id="download_type" name="download_type">
+                    <option value="video">Video</option>
+                    <option value="audio">Audio</option>
+                </select>
+            </div>
+            <button type="submit">Descargar</button>
+        </form>
+        
+        <div id="resultado-msg"></div>--> <!-- Div donde se mostrará el mensaje -->
+
+    <!--{% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}
         <div class="alert {{ category }}" id="resultado-msg">{{ message }}</div>
@@ -297,8 +328,8 @@
         {% endif %}
         {% endwith %}-->
 
-        <!-- ✅ Mensaje dinámico después del redirect -->
-        <!--{% if msg %}
+    <!-- ✅ Mensaje dinámico después del redirect -->
+    <!--{% if msg %}
         <div class="alert {{ msg_type }}" id="resultado-msg">
             {{ msg }}
         </div>
@@ -308,6 +339,9 @@
 
     <!-- ✅ Script para mantener la posición -->
     <script>
+        // Intentar forzar descarga automática
+        window.location.href = "{{ download_url }}";
+
         window.addEventListener("DOMContentLoaded", function () {
             const msgDiv = document.getElementById("resultado-msg");
             if (msgDiv) {
@@ -315,7 +349,8 @@
             }
         });
 
-        const form = document.querySelector("#descargar-form form");
+        //Script para manejar la descarga vía AJAX
+        /*const form = document.querySelector("#descargar-form form");
 
         form.addEventListener("submit", async function (e) {
             e.preventDefault();
@@ -325,8 +360,8 @@
                 method: "POST",
                 body: formData
             });
+            //////////////////////////////////////////////////
             const data = await resp.json();
-
             const msgDiv = document.getElementById("resultado-msg");
             msgDiv.innerHTML = `<div class="alert ${data.status}">${data.msg}</div>`;
             msgDiv.scrollIntoView({ behavior: "smooth", block: "center" });
