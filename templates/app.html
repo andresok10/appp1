@@ -287,14 +287,15 @@
             </div>
             <button type="submit">Descargar</button>
         </form>
+        <div id="resultado-msg"></div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
+        <!--{% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}
         <div class="alert {{ category }}" id="resultado-msg">{{ message }}</div>
         {% endfor %}
         {% endif %}
-        {% endwith %}
+        {% endwith %}-->
 
         <!-- ✅ Mensaje dinámico después del redirect -->
         <!--{% if msg %}
@@ -313,6 +314,51 @@
                 msgDiv.scrollIntoView({ behavior: "smooth", block: "center" });
             }
         });
+
+        const form = document.querySelector("#descargar-form form");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const resp = await fetch("/descargar", {
+                method: "POST",
+                body: formData
+            });
+            const data = await resp.json();
+
+            const msgDiv = document.getElementById("resultado-msg");
+            msgDiv.innerHTML = `<div class="alert ${data.status}">${data.msg}</div>`;
+            msgDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+
+            if (data.status === "success" && data.download_url) {
+                // Dispara la descarga automáticamente
+                window.location.href = data.download_url;
+            }
+        });
+
+
+        /*document.getElementById("descargar-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const resp = await fetch("/descargar", {
+                method: "POST",
+                body: formData
+            });
+            const data = await resp.json();
+
+            const msgDiv = document.getElementById("resultado-msg");
+            msgDiv.innerHTML = `<div class="alert ${data.status}">${data.msg}</div>`;
+            msgDiv.scrollIntoView({ behavior: "smooth", block: "center" });
+
+            if (data.status === "success" && data.download_url) {
+                // Inicia descarga enseguida
+                window.location.href = data.download_url;
+            }
+        });*/
+
+
     </script>
 </body>
 

@@ -4,7 +4,7 @@ from flask import (
     request,
     send_from_directory,
     redirect,
-    url_for,send_file,flash,get_flashed_messages
+    url_for,send_file,flash,get_flashed_messages,jsonify
 )
 import requests
 import calendar, os
@@ -170,21 +170,30 @@ def descargar():
             with YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
 
-            flash(f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.", "success")
+            #flash(f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.", "success")
             # 👉 Redirige directo a la descarga del archivo
             #return redirect(url_for('serve_download',
             #return redirect(url_for("calendario",
             #                        msg=f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
             #                        msg_type="success",
             #                        filename=os.path.basename(filename)))
-            return redirect(url_for('serve_download',filename=os.path.basename(filename)))
+            #return redirect(url_for('serve_download',filename=os.path.basename(filename)))
+            return jsonify({
+            "status": "success",
+            "msg": f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
+            "download_url": url_for("serve_download", filename=os.path.basename(filename))})
 
         except Exception as e:
+            return jsonify({
+            "status": "error",
+            "msg": "Error al descargar el archivo: URL no válida"})
+            
+        '''except Exception as e:
             #msg = f"Error al descargar el archivo: {str(e)}"
             #msg = f"Error al descargar el archivo: Url no valido"
             flash("Error al descargar el archivo: Url no válido", "error")
             #return redirect(url_for("calendario", msg=msg, msg_type="error"))
-            return redirect(url_for("calendario"))
+            return redirect(url_for("calendario"))'''
             
 '''from flask import send_file
 from io import BytesIO
