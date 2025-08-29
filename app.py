@@ -88,7 +88,7 @@ def calendario():
     download_url = request.args.get("download_url", "") # download_url=download_url,
 
     return render_template(
-        "app_jsonify.html",
+        "app.html",
         msg=msg,
         msg_type=msg_type,
         download_url=download_url,
