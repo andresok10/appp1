@@ -201,62 +201,65 @@
 </head>
 
 <body>
-    <h4>Calendario {{ hoy.year }}</h4>
-    <div class="calendario-contenedor">
-        {% for mes in meses %}
-        <div class="calendario-mes">
-            <h3>{{ mes.nombre }}</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>L</th>
-                        <th>M</th>
-                        <th>MI</th>
-                        <th>J</th>
-                        <th>V</th>
-                        <th>S</th>
-                        <th>D</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for semana in mes.semanas %}
-                    <tr>
-                        {% for dia in semana %}
-                        {% if dia == 0 %}
-                        <td></td>
-                        {% elif dia == hoy.day and mes.mes_numero == hoy.month %}
-                        <td class="hoy">{{ dia }}</td>
-                        {% else %}
-                        <td>{{ dia }}</td>
-                        {% endif %}
+    <div id="calen_edad">
+        <h4>Calendario {{ hoy.year }}</h4>
+        <div class="calendario-contenedor">
+            {% for mes in meses %}
+            <div class="calendario-mes">
+                <h3>{{ mes.nombre }}</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>L</th>
+                            <th>M</th>
+                            <th>MI</th>
+                            <th>J</th>
+                            <th>V</th>
+                            <th>S</th>
+                            <th>D</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for semana in mes.semanas %}
+                        <tr>
+                            {% for dia in semana %}
+                            {% if dia == 0 %}
+                            <td></td>
+                            {% elif dia == hoy.day and mes.mes_numero == hoy.month %}
+                            <td class="hoy">{{ dia }}</td>
+                            {% else %}
+                            <td>{{ dia }}</td>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
                         {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <!--id="edad"-->
+        <div class="form-section">
+            <h4>Calcular Edad y Signo Zodiacal</h4>
+            <form method="POST" action="/#calen">
+                <input type="text" name="fecha_nacimiento" placeholder="dd/mm/aaaa">
+                <button type="submit">Calcular</button>
+            </form>
+            {% if edad %}
+            <p class="resultado">Edad: {{ edad }}</p>
+            {% endif %}
+            {% if signo %}
+            <p class="resultado">Signo: {{ signo }}</p>
+            {% endif %}
+            {% if cumples %}
+            <p class="resultado">Signo: {{ signo }}</p>
+            {% endif %}
+            {% if faltan is not none %}
+            <p class="resultado">Faltan {{ faltan }} días para tu próximo cumpleaños</p>
+            {% endif %}
+        </div>
     </div>
 
-    <div class="form-section" id="edad">
-        <h4>Calcular Edad y Signo Zodiacal</h4>
-        <form method="POST" action="/#calen">
-            <input type="text" name="fecha_nacimiento" placeholder="dd/mm/aaaa">
-            <button type="submit">Calcular</button>
-        </form>
-        {% if edad %}
-        <p class="resultado">Edad: {{ edad }}</p>
-        {% endif %}
-        {% if signo %}
-        <p class="resultado">Signo: {{ signo }}</p>
-        {% endif %}
-        {% if cumples %}
-        <p class="resultado">Signo: {{ signo }}</p>
-        {% endif %}
-        {% if faltan is not none %}
-        <p class="resultado">Faltan {{ faltan }} días para tu próximo cumpleaños</p>
-        {% endif %}
-    </div>
 
     <div class="form-section" id="descuento">
         <h4>Calcular Descuento</h4>
@@ -292,7 +295,7 @@
         <div id="resultado-msg"></div> <!-- Div donde se mostrará el mensaje -->
 
     </div>
-    
+
     <script>
         // Intentar forzar descarga automática
         //window.location.href = "{{ download_url }}";
@@ -306,7 +309,7 @@
             }
         });
         window.addEventListener("DOMContentLoaded", function () {
-            const msgDiv = document.getElementById("edad");
+            const msgDiv = document.getElementById("calen_edad");
             if (msgDiv) {
                 msgDiv.scrollIntoView({ behavior: "smooth", block: "center" });
             }
