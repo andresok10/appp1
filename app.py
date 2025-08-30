@@ -59,26 +59,30 @@ def calendario():
             fnx = datetime.strptime(request.form.get("fecha_nacimiento", ""), "%d/%m/%Y")
             edad = hoy.year - fnx.year - ((hoy.month, hoy.day) < (fnx.month, fnx.day))
             cumplex = fnx.replace(year=hoy.year)
+            print(cumplex)
+            ###########
+            if cumplex < hoy:
+                cumplex = cumplex.replace(year=hoy.year + 1)
+            ###########
+            faltan = (cumplex - hoy).days
+            ###########
+            #signo = next(s for s, (m1, d1), (m2, d2) in signos
+            #    if (fnx.month == m1 and fnx.day >= d1) or (fnx.month == m2 and fnx.day <= d2)
+            #)
+            
+            for s, (m1, d1), (m2, d2) in signos:
+                if (fnx.month == m1 and fnx.day >= d1) or (fnx.month == m2 and fnx.day <= d2):
+                    signo = s
+                    break
+            ###########
             # aquí conviertes a string formateado
             fn = fnx.strftime("%d/%m/%Y")
             cumple = cumplex.strftime("%d/%m/%Y")
             print(cumple)
-            ###########
-            if cumple < hoy:
-                cumple = cumple.replace(year=hoy.year + 1)
-            ###########
-            faltan = (cumplex - hoy).days
-            ###########
-            signo = next(
-                s
-                for s, (m1, d1), (m2, d2) in signos
-                if (fnx.month == m1 and fnx.day >= d1)
-                or (fnx.month == m2 and fnx.day <= d2)
-            )
         except:
             #edad = "Ingrese fecha correcta: dia/mes/año"
             msg = ""
-
+        ###############################################################
         try:
             monto = float(request.form.get("monto", 0))
             porcentaje = float(request.form.get("porcentaje", 0))
