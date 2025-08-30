@@ -56,19 +56,22 @@ def calendario():
 
     if request.method == "POST":
         try:
-            fn = datetime.strptime(request.form.get("fecha_nacimiento", ""), "%d/%m/%Y")
-            edad = hoy.year - fn.year - ((hoy.month, hoy.day) < (fn.month, fn.day))
-            cumple = fn.replace(year=hoy.year)
-            if cumple < hoy:
-                cumple = cumple.replace(year=hoy.year + 1)
+            fnx = datetime.strptime(request.form.get("fecha_nacimiento", ""), "%d/%m/%Y")
+            edad = hoy.year - fnx.year - ((hoy.month, hoy.day) < (fnx.month, fnx.day))
+            cumplex = fnx.replace(year=hoy.year)
+            if cumplex < hoy:
+                cumplex = cumplex.replace(year=hoy.year + 1)
+            # aquí conviertes a string formateado
+            fn = fnx.strftime("%d/%m/%Y")
+            cumple = cumplex.strftime("%d/%m/%Y")
             ###########
-            faltan = (cumple - hoy).days
+            faltan = (cumplex - hoy).days
             ###########
             signo = next(
                 s
                 for s, (m1, d1), (m2, d2) in signos
-                if (fn.month == m1 and fn.day >= d1)
-                or (fn.month == m2 and fn.day <= d2)
+                if (fnx.month == m1 and fnx.day >= d1)
+                or (fnx.month == m2 and fnx.day <= d2)
             )
         except:
             #edad = "Ingrese fecha correcta: dia/mes/año"
