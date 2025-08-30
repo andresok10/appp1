@@ -84,14 +84,10 @@ def calendario():
         except:
             #descuento = "Error en los datos ingresados"
             msg = ""
-            
+    
     # recoger mensajes de la descarga si existen
     msg = request.args.get("msg", "")
     msg_type = request.args.get("msg_type", "")
-    
-    # recoger mensajes de la descarga si existen
-    #msg = request.args.get("msg", "")
-    #msg_type = request.args.get("msg_type", "")
     download_url = request.args.get("download_url", "") # download_url=download_url,
 
     return render_template(
@@ -108,7 +104,6 @@ def calendario():
         faltan=faltan,
         descuento=descuento,
     )
-
 
 ############################################################################
 # Carpeta base donde están los archivos que vas a descargar
