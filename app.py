@@ -19,27 +19,7 @@ app.secret_key = "supersecretkey"
 def inject_globals():
     return {"hoy": datetime.today()}
 
-
-@app.route("/", methods=["GET", "POST"])
-@app.route("/calen", methods=["GET", "POST"])
-def calendario():
-    hoy = datetime.today()
-    meses = [
-        {
-            "nombre": calendar.month_name[m],
-            "mes_numero": m,
-            "semanas": calendar.Calendar().monthdayscalendar(hoy.year, m),
-        }
-        for m in range(hoy.month, 13)
-    ]
-
-    edad = ""
-    signo = ""
-    cumple = ""
-    faltan = None
-    descuento = None
-
-    signos = [
+signos = [
         ("Capricornio", (12, 22), (1, 19)),
         ("Acuario", (1, 20), (2, 18)),
         ("Piscis", (2, 19), (3, 20)),
@@ -52,7 +32,27 @@ def calendario():
         ("Libra", (9, 23), (10, 22)),
         ("Escorpio", (10, 23), (11, 21)),
         ("Sagitario", (11, 22), (12, 21)),
+]
+@app.route("/", methods=["GET", "POST"])
+@app.route("/calen", methods=["GET", "POST"])
+def calendario():
+    hoy = datetime.today()
+    meses = [
+        {
+            "nombre": calendar.month_name[m],
+            "mes_numero": m,
+            "semanas": calendar.Calendar().monthdayscalendar(hoy.year, m),
+        }
+        for m in range(hoy.month, 13)
     ]
+    print(meses)
+
+    edad = ""
+    fn = ""
+    signo = ""
+    cumple = ""
+    faltan = None
+    descuento = None
 
     if request.method == "POST":
         try:
@@ -61,7 +61,9 @@ def calendario():
             cumple = fn.replace(year=hoy.year)
             if cumple < hoy:
                 cumple = cumple.replace(year=hoy.year + 1)
+            ###########
             faltan = (cumple - hoy).days
+            ###########
             signo = next(
                 s
                 for s, (m1, d1), (m2, d2) in signos
@@ -97,6 +99,7 @@ def calendario():
         hoy=hoy,
         meses=meses,
         edad=edad,
+        fn=fn,
         signo=signo,
         cumple=cumple,
         faltan=faltan,

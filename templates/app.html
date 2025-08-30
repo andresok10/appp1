@@ -250,10 +250,13 @@
         {% if signo %}
         <p class="resultado">Signo: {{ signo }}</p>
         {% endif %}
-        {% if cumples %}
-        <p class="resultado">Signo: {{ signo }}</p>
+        {% if fn %}
+        <p class="resultado">F. Nac: {{ fn }}</p>
         {% endif %}
-        {% if faltan is not none %}
+        {% if cumple %}
+        <p class="resultado">cumpleaño: {{ cumple }}</p>
+        {% endif %}
+        {% if faltan %}
         <p class="resultado">Faltan {{ faltan }} días para tu próximo cumpleaños</p>
         {% endif %}
     </div>
