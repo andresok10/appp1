@@ -158,11 +158,9 @@ def descargar():
                     "download_url": url_for("serve_download", filename=os.path.basename(filename)),
                 }
             )
-
         except Exception as e:
-                return jsonify({
-                "status": "error",
-                "msg": "Error al descargar el archivo: URL no válida"})
+                msg = "Error al descargar el archivo: URL no válida"
+                return jsonify({"status": "error", "msg": msg})
 
 ## Si quieres habilitar descarga directa de archivos:
 @app.route("/downloads/<path:filename>")
