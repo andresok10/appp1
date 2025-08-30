@@ -69,15 +69,17 @@ def calendario():
                 or (fn.month == m2 and fn.day <= d2)
             )
         except:
-            edad = "Ingrese fecha correcta: dia/mes/año"
+            #edad = "Ingrese fecha correcta: dia/mes/año"
+            msg = ""
 
         try:
             monto = float(request.form.get("monto", 0))
             porcentaje = float(request.form.get("porcentaje", 0))
             descuento = monto - (monto * porcentaje / 100)
         except:
-            descuento = "Error en los datos ingresados"
-
+            #descuento = "Error en los datos ingresados"
+            msg = ""
+            
     # recoger mensajes de la descarga si existen
     msg = request.args.get("msg", "")
     msg_type = request.args.get("msg_type", "")
