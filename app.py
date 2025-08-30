@@ -1,11 +1,10 @@
-from flask import (Flask,render_template,request,send_from_directory,
-    redirect,
-    url_for,
+from flask import (Flask,render_template,request,send_from_directory,redirect,url_for,
     send_file,
     flash,
     get_flashed_messages,
     jsonify,
 )
+import json
 import requests
 import calendar, os
 from datetime import datetime
@@ -13,7 +12,6 @@ from yt_dlp import YoutubeDL
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
-
 
 @app.context_processor
 def inject_globals():
@@ -36,6 +34,7 @@ signos = [
 @app.route("/", methods=["GET", "POST"])
 @app.route("/calen", methods=["GET", "POST"])
 def calendario():
+    msg = ""
     hoy = datetime.today()
     meses = [
         {
@@ -121,8 +120,8 @@ BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
 @app.route("/descargar", methods=["POST"])
 def descargar():
     # download_url = None
-    msg = ""
-    msg_type = ""
+    #msg = ""
+    #msg_type = ""
     if request.method == "POST":
         url = request.form.get("url").split("?")[0]  # Limpiar la URL
         # url = request.form.get("url")
@@ -147,14 +146,16 @@ def descargar():
         try:
             with YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
-            # return redirect(url_for('serve_download',filename=os.path.basename(filename)))
+            msgx = f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}."
+            #print(msg.data)
+            #msg = json.loads(msgx.data)
+            #return redirect(url_for("calendario",msg))
+            #return render_template("app.html",msg=msg)
             return jsonify(
                 {
                     "status": "success",
-                    "msg": f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}.",
-                    "download_url": url_for(
-                        "serve_download", filename=os.path.basename(filename)
-                    ),
+                    "msg": msgx,
+                    "download_url": url_for("serve_download", filename=os.path.basename(filename)),
                 }
             )
 
