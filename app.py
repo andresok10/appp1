@@ -45,7 +45,7 @@ def calendario():
         }
         for m in range(hoy.month, 13)
     ]
-    print(meses)
+    #print(meses)
 
     edad = ""
     fn = ""
@@ -59,11 +59,13 @@ def calendario():
             fnx = datetime.strptime(request.form.get("fecha_nacimiento", ""), "%d/%m/%Y")
             edad = hoy.year - fnx.year - ((hoy.month, hoy.day) < (fnx.month, fnx.day))
             cumplex = fnx.replace(year=hoy.year)
-            if cumplex < hoy:
-                cumplex = cumplex.replace(year=hoy.year + 1)
             # aquí conviertes a string formateado
             fn = fnx.strftime("%d/%m/%Y")
             cumple = cumplex.strftime("%d/%m/%Y")
+            print(cumple)
+            ###########
+            if cumple < hoy:
+                cumple = cumple.replace(year=hoy.year + 1)
             ###########
             faltan = (cumplex - hoy).days
             ###########
