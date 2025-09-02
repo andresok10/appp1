@@ -175,6 +175,51 @@ def serve_download(filename):
     # return send_from_directory(file_path, filename, as_attachment=True)
     # return send_from_directory("downloads", output_file, as_attachment=True)
     return send_from_directory(BASE_DIR, filename, as_attachment=True)
+    
+@app.route("/descargar_flutter", methods=["POST"])
+def descargarx():
+    try:
+        data = request.get_json()  # <- Esto reemplaza request.form
+        url = data.get("url")
+        download_type = data.get("download_type", "video")
+
+        if not url:
+            return jsonify({"status": "error", "msg": "No se proporcionó URL"}), 400
+
+        # Limpiar la URL eliminando parámetros
+        url = url.split("?")[0]
+
+        extension = "m4a" if download_type == "audio" else "webm"
+        counter = 1
+        while True:
+            filename = os.path.join(BASE_DIR, f"{counter}.{extension}")
+            if not os.path.exists(filename):
+                break
+            counter += 1
+
+        format_flag = "bestaudio" if download_type == "audio" else "best"
+        ydl_opts = {
+            "format": format_flag,
+            "outtmpl": filename,
+            "quiet": True,
+            "no_warnings": True,
+        }
+
+        with YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        msgx = f"{download_type.capitalize()} descargado con éxito como {os.path.basename(filename)}."
+        return jsonify({
+            "status": "success",
+            "msg": msgx,
+            "download_url": f"/downloads/{os.path.basename(filename)}"
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "msg": f"Error al descargar el archivo: {str(e)}"}), 500
+
+@app.route("/downloads/<path:filename>")
+def serve_download(filename):
+    return send_from_directory(BASE_DIR, os.path.basename(filename), as_attachment=True)
 
 if __name__ == "__main__":
     # app.run(debug=True)
