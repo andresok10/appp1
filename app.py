@@ -163,7 +163,7 @@ def descargar():
                 return jsonify({"status": "error", "msg": msg})
 
 ## Si quieres habilitar descarga directa de archivos:
-@app.route("/downloads/<path:filename>")
+'''@app.route("/downloads/<path:filename>")
 # @app.route("/download/<path:output_file>")
 def serve_download(filename):
     filename = os.path.basename(filename)
@@ -174,7 +174,7 @@ def serve_download(filename):
 
     # return send_from_directory(file_path, filename, as_attachment=True)
     # return send_from_directory("downloads", output_file, as_attachment=True)
-    return send_from_directory(BASE_DIR, filename, as_attachment=True)
+    return send_from_directory(BASE_DIR, filename, as_attachment=True)'''
     
 @app.route("/descargar_flutter", methods=["POST"])
 def descargarx():
